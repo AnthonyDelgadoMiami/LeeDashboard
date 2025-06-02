@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script type="module" src="/js/app.js"></script>
+
+    <script id="compliments-data" type="application/json" th:utext="${complimentsJson}"></script>
+</head>
+<body>
+<div th:insert="~{fragments/header :: header}"></div>
+
+<div class="container mt-4">
+    <h1>For You, Mi vida</h1>
+
+    <div class="p-3 mb-2 bg-secondary bg-gradient text-white">
+        Welcome mi amor, this is the interactive page
+        <br /><br />
+        If I plan to experiment with animatons, games and such they'll be here for you
+        <br /><br />
+        yes, I still Love and Miss you
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5 class="card-title">Click for a fact</h5>
+            <button id="complimentBtn" class="btn btn-success">Click if you are (emi)Lee</button>
+            <p id="complimentText" class="mt-2"></p>
+        </div>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5 class="card-title">Memory Quiz</h5>
+            <p>Where did we have our first date?</p>
+            <button class="btn btn-outline-primary quiz-answer">palacio de los jugos</button>
+            <button class="btn btn-outline-primary quiz-answer" id="correct-answer">Thaikyo (Thai and Sushi)</button>
+            <button class="btn btn-outline-primary quiz-answer">Je ne sais pas</button>
+            <p id="quizResult" class="mt-2 text-success"></p>
+        </div>
+    </div>
+</div>
+
+<div th:insert="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>
