@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Initialize modules
         new ComplimentGenerator('complimentBtn', 'complimentText', compliments);
         new QuizManager('quiz-answer', 'correct-answer', 'quizResult');
+        new QuizManager('quiz-answer2', 'correct-answer2', 'quizResult2');
+        new QuizManager('quiz-answer3', 'correct-answer3', 'quizResult3');
 
         console.log('Initialized successfully with compliments:', compliments);
     } catch (error) {

@@ -38,13 +38,27 @@ public class HomeController {
         return "index";
     }
 
+    @GetMapping("/secret")
+    public String secretPage(Model model) {
+        model.addAttribute("message",
+                "Emily, this is our private digital garden. " +
+                        "No one else can see this but you and me ❤️");
+        return "secret";
+    }
+
     @GetMapping("/interactive")
     public String interactive(Model model) {
         List<String> compliments = Arrays.asList(
                 "You have the best smile",
                 "You make every day brighter",
                 "I love your empathy",
-                "You're my good girl"
+                "You're my good girl",
+                "I'm probably missing you right now",
+                "I wish I could hold you now",
+                "You are so pretty, I could (and do) stare at you for hours",
+                "Probably thinking of kissing you right now",
+                "My hand misses your hand (and your throat)",
+                "I love to make you happy and cared for"
         );
 
         // Convert to JSON and add directly to model
