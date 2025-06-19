@@ -16,6 +16,7 @@
 
         <!-- Removed CSRF token completely -->
         <form id="albumForm" action="/galleria/upload" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <div class="mb-3">
                 <label for="title" class="form-label">Album Title</label>
                 <input type="text" class="form-control" id="title" name="title" required>
