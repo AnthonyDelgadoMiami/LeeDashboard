@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <!-- Only include the fragment (no <html> or <body> tags) -->
 <header th:fragment="header">
   <nav class="navbar navbar-expand-lg bg-light">
@@ -10,6 +10,13 @@
         <a class="nav-link" href="/interactive">Interactive</a>
         <a class="nav-link" href="/galleria">Gallery</a>
         <a href="/open-when" class="nav-link">Open When Letters</a>
+        <li class="nav-item" sec:authorize="isAuthenticated()">
+          <form th:action="@{/logout}" method="post" class="d-inline">
+            <button type="submit" class="nav-link btn btn-link">
+              <i class="fas fa-sign-out-alt"></i> Logout  <!-- Optional icon -->
+            </button>
+          </form>
+        </li>
       </div>
     </div>
   </nav>

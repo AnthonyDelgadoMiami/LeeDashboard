@@ -78,6 +78,11 @@ public class HomeController {
         return "open-when";
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
     private String getViewName() {
         return "index.html";
     }

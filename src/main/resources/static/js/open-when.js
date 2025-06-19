@@ -1,13 +1,14 @@
 
 const PASSWORD = "bouldering";
+const PASSWORD1 = "climbing";
 
 function openLetter(letterId) {
-    const userInput = prompt("Enter our special code to open this letter:");
+    const userInput = prompt("What is your favorite activity:");
 
-    if(userInput === PASSWORD) {
+    if(userInput === PASSWORD || userInput === PASSWORD1) {
         document.getElementById(letterId).style.display = "flex";
     } else {
-        alert("Try again, my love ❤️");
+        alert("Try again, mi vida ❤️");
     }
 }
 

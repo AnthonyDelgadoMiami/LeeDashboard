@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Love Letters | Login</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --rose-quartz: #F7CAC9;
+            --dusty-rose: #D8A7B1;
+            --soft-pink: #F4E1E1;
+            --deep-rose: #C17C74;
+            --ivory: #F9F5F0;
+        }
+
+        body {
+            background-color: var(--ivory);
+            background-image: url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            background-color: rgba(247, 202, 201, 0.9);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 380px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--dusty-rose);
+        }
+
+        .login-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--deep-rose), var(--dusty-rose));
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--deep-rose);
+            margin-bottom: 1.8rem;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            position: relative;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--deep-rose);
+            font-weight: 400;
+            font-size: 0.95rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--dusty-rose);
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.8);
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--deep-rose);
+            box-shadow: 0 0 0 3px rgba(193, 124, 116, 0.2);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--deep-rose), var(--dusty-rose));
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, var(--dusty-rose), var(--deep-rose));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(193, 124, 116, 0.3);
+        }
+
+        .error, .success {
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .error {
+            background-color: rgba(255, 214, 214, 0.7);
+            color: #c23b3b;
+            border-left: 4px solid #c23b3b;
+        }
+
+        .success {
+            background-color: rgba(214, 255, 214, 0.7);
+            color: #2e8b57;
+            border-left: 4px solid #2e8b57;
+        }
+
+        .romantic-icon {
+            position: absolute;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .heart-1 {
+            top: 20px;
+            right: 30px;
+            font-size: 1.8rem;
+            color: var(--deep-rose);
+        }
+
+        .heart-2 {
+            bottom: 15px;
+            left: 25px;
+            font-size: 1.5rem;
+            color: var(--dusty-rose);
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <i class="fas fa-heart romantic-icon heart-1"></i>
+    <i class="fas fa-heart romantic-icon heart-2"></i>
+
+    <h2>Welcome Back</h2>
+
+    <form th:action="@{/login}" method="post">
+        <div class="form-group">
+            <label for="username"><i class="fas fa-user"></i> Username</label>
+            <input type="text" id="username" name="username" placeholder="Your username" required />
+        </div>
+
+        <div class="form-group">
+            <label for="password"><i class="fas fa-lock"></i> Password</label>
+            <input type="password" id="password" name="password" placeholder="Your password" required />
+        </div>
+
+        <button type="submit">
+            <i class="fas fa-paper-plane"></i> Sign In
+        </button>
+    </form>
+
+    <p th:if="${param.error}" class="error">
+        <i class="fas fa-exclamation-circle"></i> Invalid credentials!
+    </p>
+
+    <p th:if="${param.logout}" class="success">
+        <i class="fas fa-check-circle"></i> You've been logged out successfully
+    </p>
+</div>
+</body>
+</html>
