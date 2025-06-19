@@ -73,6 +73,11 @@ public class HomeController {
         return "interactive";
     }
 
+    @GetMapping("/open-when")
+    public String openWhenLetters() {
+        return "open-when";
+    }
+
     private String getViewName() {
         return "index.html";
     }

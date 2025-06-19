@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Open When...</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/open-when.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-4">
+    <h1>Open When... </h1>
+
+    <div class="p-3 mb-2 bg-secondary bg-gradient text-white">
+        Mi amor, these are special letters for different moments in your life.
+        Click on an envelope to open a letter for when you need it most.
+        <br /><br />
+        Each one contains my thoughts, feelings, and memories for that specific moment.
+    </div>
+
+    <div class="row mt-4">
+        <!-- Letter 1 -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 envelope-card" onclick="openLetter('miss-me')">
+                <img src="/images/envelope.png" class="card-img-top" alt="Envelope">
+                <div class="card-body">
+                    <h5 class="card-title text-center">You miss me</h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Letter 2 -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 envelope-card" onclick="openLetter('need-love')">
+                <img src="/images/envelope.png" class="card-img-top" alt="Envelope">
+                <div class="card-body">
+                    <h5 class="card-title text-center">You need love</h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Letter 3 -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 envelope-card" onclick="openLetter('feel-bad)">
+                <img src="/images/envelope.png" class="card-img-top" alt="Envelope">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Feel bad</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Letter Modals -->
+<div id="miss-me" class="letter-modal">
+    <div class="letter-content">
+        <div class="modal-header">
+            <h2 class="modal-title">When You Miss Me</h2>
+            <button type="button" class="btn-close" onclick="closeModal('miss-me')"></button>
+        </div>
+        <div class="modal-body">
+            <div class="letter-paper p-4">
+                <p>My love,</p>
+                <p>When you miss me, remember...</p>
+                <div class="letter-paper">
+                    <p>My dearest Lee,</p>
+                    <p>When you miss me, remember that afternoon when we went climbing, we weren't even dating yet and I was head over heels</p>
+                    <p>Every second apart is just counting down until I can kiss you again</p>
+                    <p>Forever yours,</p>
+                    <p>Antonio</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="need-love" class="letter-modal">
+    <div class="letter-content">
+        <div class="modal-header">
+            <h2 class="modal-title">When You Miss Me</h2>
+            <button type="button" class="btn-close" onclick="closeModal('need-love')"></button>
+        </div>
+        <div class="modal-body">
+            <div class="letter-paper p-4">
+                <p>My love,</p>
+                <p>When you need love, remember...</p>
+                <div class="letter-paper">
+                    <p>My dearest Lee,</p>
+                    <p>When you need love from me, remember that I would do anything for you,</p>
+                    <p>I am always going to give you all the love I can offer, I can only ever hope it's enough</p>
+                    <p>You can always text or call me if and when you need me, I will be there</p>
+                    <p>Forever yours,</p>
+                    <p>Antonio</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="feel-bad" class="letter-modal">
+    <div class="letter-content">
+        <div class="modal-header">
+            <h2 class="modal-title">When You Miss Me</h2>
+            <button type="button" class="btn-close" onclick="closeModal('feel-bad')"></button>
+        </div>
+        <div class="modal-body">
+            <div class="letter-paper p-4">
+                <p>My love,</p>
+                <p>When you feel bad, remember...</p>
+                <div class="letter-paper">
+                    <p>My dearest Lee,</p>
+                    <p>When you feel bad, remember how much I care about you,</p>
+                    <p>Life won't be perfect, especially one with me, but I can always tell you that it gets better</p>
+                    <p>even if you are upset with me, if you need me to be there with you through the tough times, I will be there</p>
+                    <p>Forever yours,</p>
+                    <p>Antonio</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:src="@{/js/open-when.js}"></script>
+</body>
+</html>

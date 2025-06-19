@@ -1,0 +1,89 @@
+body {
+    background-color: #f8f0e6;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+h1 {
+    font-family: 'Dancing Script', cursive;
+    color: #d23669;
+    font-size: 3rem;
+    margin-bottom: 40px;
+}
+
+.envelopes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px;
+}
+
+.envelope {
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.envelope:hover {
+    transform: translateY(-10px);
+}
+
+.envelope img {
+    width: 150px;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
+}
+
+.envelope p {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Letter Modal */
+.letter-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+}
+
+.letter-content {
+    background: url('/images/paper-texture.jpg');
+    background-size: cover;
+    width: 80%;
+    max-width: 600px;
+    padding: 40px;
+    border-radius: 5px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.letter-paper {
+    background: rgba(255,255,255,0.9);
+    padding: 30px;
+    border-radius: 3px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.3rem;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
