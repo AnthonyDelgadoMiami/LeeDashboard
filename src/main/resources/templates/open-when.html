@@ -44,10 +44,40 @@
 
         <!-- Letter 3 -->
         <div class="col-md-4 mb-4">
-            <div class="card h-100 envelope-card" onclick="openLetter('feel-bad)">
+            <div class="card h-100 envelope-card" onclick="openLetter('feel-bad')">
                 <img src="/images/envelope.png" class="card-img-top" alt="Envelope">
                 <div class="card-body">
                     <h5 class="card-title text-center">Feel bad</h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Letter 4 -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 envelope-card" onclick="openLetter('are-happy')">
+                <img src="/images/envelope.png" class="card-img-top" alt="Envelope">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Are happy</h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Letter 5 -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 envelope-card" onclick="openLetter('are-anxious')">
+                <img src="/images/envelope.png" class="card-img-top" alt="Envelope">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Are Anxious</h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Letter 6 -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 envelope-card" onclick="openLetter('feel-shame')">
+                <img src="/images/envelope.png" class="card-img-top" alt="Envelope">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Feel Shame</h5>
                 </div>
             </div>
         </div>
@@ -55,6 +85,7 @@
 </div>
 
 <!-- Letter Modals -->
+<!-- Letter 1 -->
 <div id="miss-me" class="letter-modal">
     <div class="letter-content">
         <div class="modal-header">
@@ -77,6 +108,7 @@
     </div>
 </div>
 
+<!-- Letter 2 -->
 <div id="need-love" class="letter-modal">
     <div class="letter-content">
         <div class="modal-header">
@@ -100,10 +132,37 @@
     </div>
 </div>
 
+<!-- Letter 4 -->
+<div id="are-happy" class="letter-modal">
+    <div class="letter-content">
+        <div class="modal-header">
+            <h2 class="modal-title">When You Are Happy</h2>
+            <button type="button" class="btn-close" onclick="closeModal('are-happy')"></button>
+        </div>
+        <div class="modal-body">
+            <div class="letter-paper p-4">
+                <p>My love,</p>
+                <p>When you are happy, remember...</p>
+                <div class="letter-paper">
+                    <p>My dearest Lee,</p>
+                    <p>When you are happy, I am happy for you,</p>
+                    <p>Seeing your happy smile, seeing you laugh and emote the way you do makes me want to keep you like that forever</p>
+                    <p>When I see you eat food you enjoy, when I see you laugh at my comically unfunny (or worse, your unfunny) jokes,</p>
+                    <p>I can't help but want to kiss you and preserve it as long as I can</p>
+                    <p>Forever yours,</p>
+                    <p>Antonio</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Letter 3 -->
 <div id="feel-bad" class="letter-modal">
     <div class="letter-content">
         <div class="modal-header">
-            <h2 class="modal-title">When You Miss Me</h2>
+            <h2 class="modal-title">When You Feel Bad</h2>
             <button type="button" class="btn-close" onclick="closeModal('feel-bad')"></button>
         </div>
         <div class="modal-body">
@@ -115,6 +174,55 @@
                     <p>When you feel bad, remember how much I care about you,</p>
                     <p>Life won't be perfect, especially one with me, but I can always tell you that it gets better</p>
                     <p>even if you are upset with me, if you need me to be there with you through the tough times, I will be there</p>
+                    <p>Forever yours,</p>
+                    <p>Antonio</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Letter 5 -->
+<div id="are-anxious" class="letter-modal">
+    <div class="letter-content">
+        <div class="modal-header">
+            <h2 class="modal-title">When You Are Anxious</h2>
+            <button type="button" class="btn-close" onclick="closeModal('are-anxious')"></button>
+        </div>
+        <div class="modal-body">
+            <div class="letter-paper p-4">
+                <p>My love,</p>
+                <p>When you are anxious, remember...</p>
+                <div class="letter-paper">
+                    <p>My dearest Lee,</p>
+                    <p>When you are anxious, remember that this will pass,</p>
+                    <p>You may be anxious about family, education, career, anything</p>
+                    <p>But you are never alone, you have a loving group of friends, (from what I understand) a loving mother, and Winter and Kana</p>
+                    <p>You are never alone, you always have someone to lean on, and how you feel will get better mi amor</p>
+                    <p>Forever yours,</p>
+                    <p>Antonio</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Letter 6 -->
+<div id="feel-shame" class="letter-modal">
+    <div class="letter-content">
+        <div class="modal-header">
+            <h2 class="modal-title">When You Feel Shame</h2>
+            <button type="button" class="btn-close" onclick="closeModal('feel-shame')"></button>
+        </div>
+        <div class="modal-body">
+            <div class="letter-paper p-4">
+                <p>My love,</p>
+                <p>When you feel shame, remember...</p>
+                <div class="letter-paper">
+                    <p>My dearest Lee,</p>
+                    <p>When you feel shame, remember how much good you do,</p>
+                    <p>You won't always feel perfect with yourself, nobody does, but when you are ashamed remember that you also have many reasons to feel pride</p>
+                    <p>You make everyone's life better, I've seen and felt it firsthand, never doubt yourself as a person, I am always impressed with you</p>
                     <p>Forever yours,</p>
                     <p>Antonio</p>
                 </div>

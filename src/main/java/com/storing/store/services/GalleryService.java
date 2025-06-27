@@ -3,6 +3,7 @@ package com.storing.store.services;
 import com.storing.store.models.Album;
 import com.storing.store.models.GalleryImage;
 import com.storing.store.repositories.AlbumRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,9 +21,9 @@ public class GalleryService {
     private final AlbumRepository albumRepository;
     private final Path rootLocation;
 
-    public GalleryService(AlbumRepository albumRepository) {
+    public GalleryService(AlbumRepository albumRepository, @Value("${file.upload-dir}") String uploadDir) {
         this.albumRepository = albumRepository;
-        this.rootLocation = Paths.get("src/main/resources/static/uploads");
+        this.rootLocation = Paths.get(uploadDir);
         try {
             Files.createDirectories(rootLocation);
         } catch (IOException e) {

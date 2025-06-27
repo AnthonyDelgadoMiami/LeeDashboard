@@ -53,16 +53,39 @@
             <button class="btn btn-outline-primary quiz-answer3">bench pressing</button>
             <p id="quizResult3" class="mt-2 text-success"></p>
         </div>
+        <div class="card-body">
+            <p>What is the capital of Kazakhstan?</p>
+            <button class="btn btn-outline-primary quiz-answer4" id="correct-answer4">Astana</button>
+            <button class="btn btn-outline-primary quiz-answer4">Venice</button>
+            <button class="btn btn-outline-primary quiz-answer4">Famous beach and tourist spot Lantana, Florida</button>
+            <p id="quizResult4" class="mt-2 text-success"></p>
+        </div>
+        <div class="card-body">
+            <p>What is Lee's favorite animal?</p>
+            <button class="btn btn-outline-primary quiz-answer5">You are stupid to think any one person has one favorite animal</button>
+            <button class="btn btn-outline-primary quiz-answer5">Bold of you to assume people have favorite animals</button>
+            <button class="btn btn-outline-primary quiz-answer5" id="correct-answer5">Frogs</button>
+            <p id="quizResult5" class="mt-2 text-success"></p>
+        </div>
+        <div class="card-body">
+            <p>Lee's favroite stand?</p>
+            <button class="btn btn-outline-primary quiz-answer6">Echo's act 1,2, or 3 (Koichi's stand)</button>
+            <button class="btn btn-outline-primary quiz-answer6">Star Platinum (Jotaro's stand)</button>
+            <button class="btn btn-outline-primary quiz-answer6" id="correct-answer6">Purple Haze (Fugo's stand)</button>
+            <p id="quizResult6" class="mt-2 text-success"></p>
+        </div>
     </div>
-</div>
 
-<div class="constellation-container">
-    <div class="night-sky">
+    <div class="constellation-container card mt-3">
+        <h5 class = "star-header">How you make me feel (click on a star mi amor)</h5>
+        <div class="night-sky">
+        </div>
+        <div class="reason-display">
+            <p class="handwritten-text"></p>
+        </div>
+        <audio id="harpAudio" src="/audios/soft-harp.mp3" preload="auto"></audio>
     </div>
-    <div class="reason-display">
-        <p class="handwritten-text"></p>
-    </div>
-    <audio id="harpAudio" src="/audios/soft-harp.mp3" preload="auto"></audio>
+
 </div>
 
 <div th:insert="~{fragments/footer :: footer}"></div>

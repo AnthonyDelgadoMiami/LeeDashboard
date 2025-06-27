@@ -14,6 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
         new QuizManager('quiz-answer', 'correct-answer', 'quizResult');
         new QuizManager('quiz-answer2', 'correct-answer2', 'quizResult2');
         new QuizManager('quiz-answer3', 'correct-answer3', 'quizResult3');
+        new QuizManager('quiz-answer4', 'correct-answer4', 'quizResult4');
+        new QuizManager('quiz-answer5', 'correct-answer5', 'quizResult5');
+        new QuizManager('quiz-answer6', 'correct-answer6', 'quizResult6');
+
 
         console.log('Initialized successfully with compliments:', compliments);
     } catch (error) {
@@ -96,6 +100,28 @@ function showRandomReason(star) {
   audio.currentTime = 0;
   audio.play();
 }
+function isInViewport(element) {
+    const rect = element.getBoundingClientRect();
+    return (
+        rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.bottom >= 0
+    );
+}
 
+// Add this function to handle scroll events
+function handleScrollAnimation() {
+    const constellation = document.querySelector('.constellation-container');
+    if (isInViewport(constellation)) {
+        constellation.classList.add('visible');
+        // Remove the event listener after animation triggers
+        window.removeEventListener('scroll', handleScrollAnimation);
+    }
+}
 // Initialize on load
-window.addEventListener('load', createStars);
+window.addEventListener('load', function() {
+    createStars();
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScrollAnimation);
+    // Check immediately in case the element is already in view
+    handleScrollAnimation();
+});
