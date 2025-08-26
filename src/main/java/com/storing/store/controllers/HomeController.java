@@ -176,7 +176,7 @@ public class HomeController {
         else if (hour >= 12 && hour < 13) {
             switch(day) {
                 case MONDAY: case TUESDAY: case WEDNESDAY: case THURSDAY: case FRIDAY: return "AT LUNCH, please call me instead, I miss you";
-                case SATURDAY: case SUNDAY: return "50 bucks says you are with me or thinking of me";
+                case SATURDAY: case SUNDAY: return "50 bucks says you are with me or thinking of me I bet";
                 default: return "Hope your day is going well, my love! Thinking of you this afternoon.";
             }
         }
