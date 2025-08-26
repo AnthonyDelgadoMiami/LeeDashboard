@@ -8,7 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +34,10 @@ public class HomeController {
         }
         daysUntil = ChronoUnit.DAYS.between(LocalDate.now(), anniversary);
         model.addAttribute("daysUntilAnniversary", daysUntil);
+
+        // Add reminders
+        String reminderMessage = getDailyReminder();
+        model.addAttribute("dailyReminder", reminderMessage);
 
         // Get weather data her house: 26.642874, -80.066658
         WeatherData weather = getWeatherData("26.642874", "-80.066658");
@@ -147,6 +154,58 @@ public class HomeController {
                 case 85: case 86: return "🌨"; // Snow showers
                 case 95: case 96: case 99: return "⛈"; // Thunderstorm
                 default: return "🌈";
+            }
+        }
+    }
+
+    private String getDailyReminder() {
+        DayOfWeek day = LocalDate.now().getDayOfWeek();
+        int hour = LocalTime.now().getHour();
+
+        // Morning (6 AM - 11 AM)
+        if (hour >= 6 && hour < 12) {
+            switch(day) {
+                case MONDAY: case THURSDAY: return "Good morning my love, remember to take your vitamins";
+                case TUESDAY: case WEDNESDAY: return "Good morning mi amor, remember to take your vitamins and to get ready for school";
+                case FRIDAY: return "Good morning my love, remember to take your vitamins, you'll see me so soon";
+                case SATURDAY: case SUNDAY: return "Weekend morning is the best, best likelihood of seeing you";
+                default: return "Rise and shine, my love! Thinking of you this morning.";
+            }
+        }
+        // Afternoon (12 AM - 1 PM)
+        else if (hour >= 12 && hour < 13) {
+            switch(day) {
+                case MONDAY: case TUESDAY: case WEDNESDAY: case THURSDAY: case FRIDAY: return "AT LUNCH, please call me instead, I miss you";
+                case SATURDAY: case SUNDAY: return "50 bucks says you are with me or thinking of me";
+                default: return "Hope your day is going well, my love! Thinking of you this afternoon.";
+            }
+        }
+        // Afternoon (1 PM - 4 PM)
+        else if (hour >= 13 && hour < 16) {
+            switch(day) {
+                case MONDAY: case THURSDAY: return "I'm at work still, but I miss you";
+                case TUESDAY: case WEDNESDAY: return "Good luck at school mi vida, I'm just at work";
+                case FRIDAY: return "I'm at work, but only for now, you'll see me soon";
+                case SATURDAY: case SUNDAY: return "50 bucks says you are with me or thinking of me";
+                default: return "Hope your day is going well, my love! Thinking of you this afternoon.";
+            }
+        }
+        // Evening (5 PM - 8 PM)
+        else if (hour >= 16 && hour < 21) {
+            switch(day) {
+                case MONDAY: case THURSDAY: return "Working out, I know you are working so hard right now";
+                case TUESDAY: case WEDNESDAY: return "Working out, I know you are working so hard right now in class right now";
+                case FRIDAY: return "I'm driving to you now, don't worry";
+                case SATURDAY: case SUNDAY: return "50 bucks says you are with me or thinking of me";
+                default: return "Hope your day is going well, my love! Thinking of you this afternoon.";
+            }
+        }
+        // Night (9 PM - 4 AM)
+        else {
+            switch(day) {
+                case MONDAY: case TUESDAY: case WEDNESDAY: case THURSDAY: case FRIDAY: return "Good night mi vida, you'll see me soon";
+                case SATURDAY: case SUNDAY: return "Let's have a good night, I always have fun with you";
+                default: return "Hope your day is going well, my love! Thinking of you this afternoon.";
             }
         }
     }

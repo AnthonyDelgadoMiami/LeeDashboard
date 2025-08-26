@@ -20,6 +20,17 @@
     yes, I Love and Miss you
   </div>
 
+  <!-- Reminders Section -->
+  <div class="card mt-3 border-info">
+    <div class="card-header bg-info bg-opacity-25">
+      <h5 class="card-title mb-0">💭 Daily Reminder</h5>
+    </div>
+    <div class="card-body bg-info bg-opacity-10">
+      <p class="card-text fst-italic fs-5" th:text="${dailyReminder}"></p>
+      <small class="text-muted" th:text="'(' + ${T(java.time.LocalDate).now().getDayOfWeek().toString().toLowerCase()} + ' ' + ${T(java.time.LocalTime).now().format(T(java.time.format.DateTimeFormatter).ofPattern('hh:mm a'))} + ')'"></small>
+    </div>
+  </div>
+
   <div class="card mt-3">
     <div class="card-body">
       <h5 class="card-title">Countdown to Our Anniversary</h5>

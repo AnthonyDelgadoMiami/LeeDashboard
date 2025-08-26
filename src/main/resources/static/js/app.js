@@ -17,6 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
         new QuizManager('quiz-answer4', 'correct-answer4', 'quizResult4');
         new QuizManager('quiz-answer5', 'correct-answer5', 'quizResult5');
         new QuizManager('quiz-answer6', 'correct-answer6', 'quizResult6');
+        new QuizManager('quiz-answer7', 'correct-answer7', 'quizResult7');
+        new QuizManager('quiz-answer8', 'correct-answer8', 'quizResult8');
+        new QuizManager('quiz-answer9', 'correct-answer9', 'quizResult9');
+        new QuizManager('quiz-answer10', 'correct-answer10', 'quizResult10');
 
 
         console.log('Initialized successfully with compliments:', compliments);
@@ -44,7 +48,22 @@ const reasons = [
   "How happy am I to have you in my life",
   "How you make me want to kidnap you",
   "I Love you so much",
-  "I am probably missing you now"
+  "I am probably missing you now",
+  "How your smile melts away all my worries and makes the world feel right again",
+  "The way your laugh fills the room and makes me fall in Love with you all over again",
+  "I Love how you make even the simplest days feel extraordinary",
+  "Being with you makes every place feel like home",
+  "The way you look at me makes me feel like the luckiest person alive",
+  "I Love the way you challenge me and push me to grow, while always supporting me",
+  "Your touch feels like electricity and comfort at the same time",
+  "I Love that no matter how much time we spend together, it never feels like enough",
+  "The way you believe in me, even when I doubt myself, makes me Love you more",
+  "I Love how we can be silly, serious, or quiet together—and it’s always perfect",
+  "The thought of growing old with you fills me with peace and joy",
+  "I Love the way you understand me without me even having to explain",
+  "Your presence alone makes my heart feel full",
+  "I Love how we can talk about everything and nothing, and it still feels meaningful",
+  "The way you Love me teaches me what real Love truly means"
 ];
 
 // Create stars
