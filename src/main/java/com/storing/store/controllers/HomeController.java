@@ -2,6 +2,8 @@ package com.storing.store.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.storing.store.models.Event;
+import com.storing.store.services.EventService;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +22,13 @@ import java.util.Map;
 @Controller
 public class HomeController {
 
-    public HomeController(RestTemplateBuilder restTemplateBuilder) {
+    private final EventService eventService;
+
+    public HomeController(EventService eventService, RestTemplateBuilder restTemplateBuilder) {
+        this.eventService = eventService;
         this.restTemplate = restTemplateBuilder.build();
     }
+
 
     @GetMapping("/")
     public String index(Model model) {
@@ -38,6 +44,14 @@ public class HomeController {
         // Add reminders
         String reminderMessage = getDailyReminder();
         model.addAttribute("dailyReminder", reminderMessage);
+
+        LocalDate today = LocalDate.now();
+        List<Event> todaysEvents = eventService.getEventsForDate(today);
+
+        // Add to model
+        model.addAttribute("todaysEvents", todaysEvents);
+        model.addAttribute("hasEvents", !todaysEvents.isEmpty());
+
 
         // Get weather data her house: 26.642874, -80.066658
         WeatherData weather = getWeatherData("26.642874", "-80.066658");
@@ -208,7 +222,7 @@ public class HomeController {
                 default: return "Hope your day is going well, my love! Thinking of you this afternoon.";
             }
         }
-        // Evening (5 PM - 8 PM)
+        // Evening (4 PM - 9 PM)
         else if (hour >= 16 && hour < 21) {
             switch(day) {
                 case MONDAY: case THURSDAY: return "Working out, I know you are working so hard right now";

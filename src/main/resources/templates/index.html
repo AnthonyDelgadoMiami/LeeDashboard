@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Emily's Dashboard</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link th:href="@{/css/index.css}" rel="stylesheet">
 </head>
 <body>
 
@@ -49,6 +50,41 @@
         | Wind: <span th:text="${weather.windSpeed + ' km/h'}"></span>
       </p>
       <small class="text-muted">Location: Your House</small>
+    </div>
+  </div>
+
+  <!-- Today's Events Section -->
+  <div class="card mt-3 border-warning">
+    <div class="card-header bg-warning bg-opacity-25 d-flex justify-content-between align-items-center">
+      <h5 class="card-title mb-0">📅 Today's Events</h5>
+      <span class="badge bg-warning" th:text="${todaysEvents.size()} + ' event(s)'"></span>
+    </div>
+    <div class="card-body bg-warning bg-opacity-10">
+      <div th:if="${hasEvents}">
+        <div th:each="event : ${todaysEvents}" class="event-item mb-3 p-3 border rounded">
+          <div class="d-flex align-items-start">
+            <span class="me-3">🎯</span>
+            <div class="flex-grow-1">
+              <h6 class="mb-1 fw-bold" th:text="${event.name}">Event Name</h6>
+              <p class="mb-0 text-muted small" th:if="${event.description}" th:text="${event.description}">Event description</p>
+              <p class="mb-0 text-muted small fst-italic" th:unless="${event.description}">No description provided</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div th:unless="${hasEvents}">
+        <div class="text-center py-3">
+          <span class="display-6">📅</span>
+          <p class="text-muted mb-2">No events scheduled for today</p>
+          <small class="text-muted">Enjoy your day! ❤️</small>
+        </div>
+      </div>
+      <div class="text-center mt-3">
+        <a href="/surprises" class="btn btn-warning btn-sm">
+          <span>View Full Calendar</span>
+          <span>→</span>
+        </a>
+      </div>
     </div>
   </div>
 

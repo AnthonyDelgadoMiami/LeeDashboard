@@ -1,152 +1,175 @@
-document.addEventListener('DOMContentLoaded', function() {
-    initializeEventListeners();
+function showDay(dateString) {
+    const modal = document.getElementById('eventModal');
+    const modalDate = document.getElementById('modalDate');
+    const eventDateInput = document.getElementById('eventDate');
 
-    window.addEventListener('click', function(event) {
-        if (event.target === document.getElementById('eventModal')) {
-            closeModal();
-        }
-    });
-});
+    modalDate.textContent = formatDate(dateString);
+    eventDateInput.value = dateString;
 
-// Safe CSRF token handling with fallback
-function getCsrfToken() {
-    const tokenMeta = document.querySelector('meta[name="_csrf"]');
-    return tokenMeta ? tokenMeta.content : '';
-}
+    // Load events for this date
+    loadEvents(dateString);
 
-function getCsrfHeaderName() {
-    const headerMeta = document.querySelector('meta[name="_csrf_header"]');
-    return headerMeta ? headerMeta.content : 'X-CSRF-TOKEN';
-}
+    fetchEventsForSummary(dateString);
 
-function initializeEventListeners() {
-    document.querySelectorAll('.day:not(.empty-day)').forEach(day => {
-        day.addEventListener('click', function() {
-            const date = this.getAttribute('data-date');
-            showDayEvents(date);
-        });
-    });
-
-    document.getElementById('eventForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        addNewEvent();
-    });
-
-    document.querySelector('.close')?.addEventListener('click', closeModal);
-}
-
-function showDayEvents(date) {
-    fetch(`/api/surprises/events?date=${date}`)
-        .then(handleResponse)
-        .then(events => {
-            updateModalContent(date, events);
-            document.getElementById('eventModal').style.display = 'block';
-        })
-        .catch(handleError);
-}
-
-function updateModalContent(date, events) {
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    document.getElementById('modalDate').textContent = new Date(date).toLocaleDateString('en-US', options);
-    console.log(new Date(date))
-    document.getElementById('eventDate').value = date;
-
-    const container = document.getElementById('eventsContainer');
-    container.innerHTML = events.length ? '' : '<p>No events for this day</p>';
-
-    events.forEach(event => {
-        container.appendChild(createEventElement(event, date));
-    });
-}
-
-function createEventElement(event, date) {
-    const eventDiv = document.createElement('div');
-    eventDiv.className = 'event-item';
-    eventDiv.innerHTML = `
-        <h3>${escapeHtml(event.name)}</h3>
-        <p>${event.description ? escapeHtml(event.description) : 'No description'}</p>
-        <button onclick="deleteEvent('${event.id}', '${date}')">Delete</button>
-        <hr>
-    `;
-    return eventDiv;
-}
-
-function addNewEvent() {
-    const nameInput = document.getElementById('eventName');
-    const descInput = document.getElementById('eventDesc');
-
-    if (!nameInput.value.trim()) {
-        alert('Event name is required');
-        return;
-    }
-
-    const headers = {
-        'Content-Type': 'application/json',
-        [getCsrfHeaderName()]: getCsrfToken()
-    };
-
-    fetch('/api/surprises/events', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-            name: nameInput.value.trim(),
-            description: descInput.value.trim(),
-            date: dateInput.value
-        })
-    })
-    .then(response => handleResponse(response))
-    .then(data => {
-        nameInput.value = '';
-        descInput.value = '';
-        showDayEvents(dateInput.value);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Event added successfully!'); // Changed to success message
-    });
-}
-
-function deleteEvent(eventId, date) {
-    if (!confirm('Are you sure you want to delete this event?')) return;
-
-    fetch(`/api/surprises/events/${eventId}`, {
-        method: 'DELETE',
-        headers: { [getCsrfHeaderName()]: getCsrfToken() }
-    })
-    .then(response => handleResponse(response))
-    .then(() => showDayEvents(date))
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Event deleted successfully!'); // Changed to success message
-    });
+    modal.style.display = 'block';
 }
 
 function closeModal() {
     document.getElementById('eventModal').style.display = 'none';
 }
 
-// Helper functions
-function handleResponse(response) {
-    const contentType = response.headers.get('content-type');
-    if (!response.ok) {
-        throw new Error(response.statusText);
-    }
-    if (contentType && contentType.includes('application/json')) {
-        return response.json();
-    }
-    return null; // For empty responses
+function formatDate(dateString) {
+    // Parse as local date without timezone conversion
+    const date = new Date(dateString + 'T12:00:00'); // Use noon to avoid DST issues
+
+    return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 }
 
-function handleError(error) {
-    console.error('Error:', error);
-    alert('Operation failed. Please try again.');
+function loadEvents(date) {
+    const eventsContainer = document.getElementById('eventsContainer');
+    eventsContainer.innerHTML = '<p>Loading events...</p>';
+
+    fetch(`/surprises/events?date=${date}`, {
+        headers: {
+            'Content-Type': 'application/json',
+            [document.querySelector('meta[name="_csrf_header"]').content]:
+                document.querySelector('meta[name="_csrf"]').content
+        }
+    })
+    .then(response => response.json())
+    .then(events => {
+        if (events.length === 0) {
+            eventsContainer.innerHTML = '<p>No events for this day.</p>';
+        } else {
+            eventsContainer.innerHTML = events.map(event => `
+                <div class="event-item" data-event-id="${event.id}">
+                    <button class="delete-btn" onclick="deleteEvent(${event.id}, '${date}')">X</button>
+                    <div class="event-content">
+                        <h4>${event.name}</h4>
+                        <p>${event.description || 'No description'}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+    })
+    .catch(error => {
+        eventsContainer.innerHTML = '<p>Error loading events.</p>';
+        console.error('Error:', error);
+    });
 }
 
-function escapeHtml(unsafe) {
-    return unsafe
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+function deleteEvent(eventId, date) {
+    if (!confirm('Are you sure you want to delete this event?')) {
+        return;
+    }
+
+    fetch(`/surprises/events/${eventId}`, {
+        method: 'DELETE',
+        headers: {
+            [document.querySelector('meta[name="_csrf_header"]').content]:
+                document.querySelector('meta[name="_csrf"]').content
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            // Reload events after successful deletion
+            loadEvents(date);
+        } else {
+            alert('Error deleting event');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error deleting event');
+    });
 }
+
+// Event form submission
+document.getElementById('eventForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const eventData = {
+        date: document.getElementById('eventDate').value,
+        name: document.getElementById('eventName').value,
+        description: document.getElementById('eventDesc').value
+    };
+
+    fetch('/surprises/events', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            [document.querySelector('meta[name="_csrf_header"]').content]:
+                document.querySelector('meta[name="_csrf"]').content
+        },
+        body: JSON.stringify(eventData)
+    })
+    .then(response => {
+        if (response.ok) {
+            // Reload events and reset form
+            loadEvents(eventData.date);
+            document.getElementById('eventForm').reset();
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('eventModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+}
+
+function updateEventsSummary(events, dateString) {
+    const todayEventsContainer = document.getElementById('todayEvents');
+    const formattedDate = formatDate(dateString);
+
+    if (events.length === 0) {
+        todayEventsContainer.innerHTML = `
+            <p class="no-events">No events for ${formattedDate}</p>
+        `;
+    } else {
+        todayEventsContainer.innerHTML = `
+            <p class="summary-date"><strong>${formattedDate}</strong></p>
+            ${events.map(event => `
+                <div class="event-item">
+                    <div class="event-title">${event.name}</div>
+                    <div class="event-description">${event.description || 'No description'}</div>
+                </div>
+            `).join('')}
+        `;
+    }
+}
+
+function fetchEventsForSummary(dateString) {
+    fetch(`/surprises/events?date=${dateString}`, {
+        headers: {
+            'Content-Type': 'application/json',
+            [document.querySelector('meta[name="_csrf_header"]').content]:
+                document.querySelector('meta[name="_csrf"]').content
+        }
+    })
+    .then(response => response.json())
+    .then(events => {
+        updateEventsSummary(events, dateString);
+    })
+    .catch(error => {
+        console.error('Error loading events for summary:', error);
+        document.getElementById('todayEvents').innerHTML = `
+            <p class="text-muted">Error loading events</p>
+        `;
+    });
+}
+
+// Optional: Load today's events when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+    fetchEventsForSummary(todayString);
+});

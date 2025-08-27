@@ -1,115 +1,207 @@
-/* Calendar styles */
-.day {
-    height: 100px;
-    border: 1px solid #dee2e6;
-    padding: 5px;
-    cursor: pointer;
-    position: relative;
-}
-
-.empty-day {
-    background-color: #f9f9f9;
-    cursor: default;
-}
-
-.day-number {
-    font-weight: bold;
-}
-
-.event-indicator {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background-color: #4CAF50;
-    border-radius: 50%;
-    margin-right: 4px;
-}
-
-/* Modal styles */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 100;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.4);
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 50%;
-    max-width: 500px;
-    border-radius: 5px;
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+  border-radius: 8px;
+  max-height: 80vh; /* Limit height */
+  overflow-y: auto; /* Add scroll if content is too tall */
 }
 
 .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-#eventForm input, #eventForm textarea {
-    width: 100%;
-    padding: 8px;
-    margin: 5px 0;
-    box-sizing: border-box;
-}
-
-#eventForm button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer;
+.close:hover {
+  color: black;
 }
 
 .day {
-    height: 100px;
-    padding: 5px;
-    position: relative;
+  cursor: pointer;
+  height: 80px;
+  vertical-align: top;
+  position: relative;
+}
+
+.day:hover {
+  background-color: #f8f9fa;
 }
 
 .empty-day {
-    background-color: #f9f9f9;
-    cursor: default;
+  background-color: #f8f9fa;
+  cursor: default;
 }
 
-.day.current-day {
-    background-color: #e9ecef;
+.event-badge {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.event-item {
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #f9f9f9;
+    word-wrap: break-word; /* Force long words to break */
+    overflow-wrap: break-word; /* Modern alternative */
+    hyphens: auto; /* Add hyphens when breaking words */
+}
+
+.delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
     font-weight: bold;
 }
 
-.day-content {
-    height: 100%;
+.delete-btn:hover {
+    background: #cc0000;
+}
+
+.event-content {
+    margin-right: 30px; /* Space for the delete button */
+}
+
+.event-content h4 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.event-content p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+    white-space: pre-wrap; /* Preserve spaces and line breaks */
+    word-break: break-word; /* Break long words */
+}
+
+/* Form styles */
+#eventForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between form elements */
+}
+
+.form-group {
     display: flex;
     flex-direction: column;
 }
 
-.day-number {
-    font-weight: bold;
-    margin-bottom: 3px;
+#eventName, #eventDesc {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    box-sizing: border-box;
 }
 
-.event-names {
-    flex-grow: 1;
-    overflow: hidden;
+#eventName:focus, #eventDesc:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
-.event-name {
-    font-size: 0.8em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin: 1px 0;
-    padding: 2px;
-    background-color: rgba(76, 175, 80, 0.1);
-    border-radius: 3px;
+#eventDesc {
+    resize: vertical;
+    min-height: 80px;
 }
 
+#eventForm button {
+    align-self: flex-start;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#eventForm button:hover {
+    background-color: #0056b3;
+}
+
+/* Enhanced Events Summary Styles */
+.events-summary .card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.events-summary .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    padding: 15px 20px;
+}
+
+.events-summary .card-body {
+    padding: 20px;
+}
+
+.events-summary .summary-date {
+    color: #495057;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.events-summary .event-item {
+    border-left: 4px solid #007bff;
+    padding: 12px 15px;
+    margin-bottom: 12px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.events-summary .event-item:last-child {
+    margin-bottom: 0;
+}
+
+.events-summary .event-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #212529;
+}
+
+.events-summary .event-description {
+    color: #6c757d;
+    margin-bottom: 0;
+    line-height: 1.4;
+}

@@ -1,7 +1,7 @@
 package com.storing.store.controllers;
 
 import com.storing.store.models.Event;
-import com.storing.store.repositories.EventService;
+import com.storing.store.services.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,7 +12,9 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/surprises")
@@ -38,12 +40,26 @@ public class AdventCalendarController {
 
         List<List<LocalDate>> weeks = generateCalendar(currentMonth);
 
+        // Pre-calculate event counts for each day in the current month
+        Map<LocalDate, Integer> eventCounts = new HashMap<>();
+        for (List<LocalDate> week : weeks) {
+            for (LocalDate day : week) {
+                if (day.getMonth() == currentMonth.getMonth()) {
+                    int count = eventService.getEventsForDate(day).size();
+                    if (count > 0) {
+                        eventCounts.put(day, count);
+                    }
+                }
+            }
+        }
+
         model.addAttribute("currentMonth", currentMonth);
         model.addAttribute("monthName", currentMonth.getMonth().toString());
         model.addAttribute("year", currentMonth.getYear());
         model.addAttribute("weeks", weeks);
         model.addAttribute("prevMonth", prevMonth.format(DateTimeFormatter.ofPattern("yyyy-MM")));
         model.addAttribute("nextMonth", nextMonth.format(DateTimeFormatter.ofPattern("yyyy-MM")));
+        model.addAttribute("eventCounts", eventCounts); // Add event counts to model
 
         return "surprises/calendar";
     }
@@ -70,16 +86,27 @@ public class AdventCalendarController {
         return weeks;
     }
 
-//    @PostMapping("/events")
-//    @ResponseBody
-//    public ResponseEntity<?> addEvent(@RequestBody Event event) {
-//        eventService.addEvent(event);
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @GetMapping("/events")
-//    @ResponseBody
-//    public List<Event> getEvents(@RequestParam String date) {
-//        return eventService.getEventsForDate(LocalDate.parse(date));
-//    }
+    @PostMapping("/events")
+    @ResponseBody
+    public ResponseEntity<?> addEvent(@RequestBody Event event) {
+        eventService.addEvent(event);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/events")
+    @ResponseBody
+    public List<Event> getEvents(@RequestParam String date) {
+        return eventService.getEventsForDate(LocalDate.parse(date));
+    }
+
+    @DeleteMapping("/events/{id}")
+    @ResponseBody
+    public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
+        try {
+            eventService.deleteEvent(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

@@ -1,0 +1,21 @@
+
+.event-item {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.event-item .flex-grow-1 {
+    min-width: 0;
+}
+
+.event-item h6 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.event-item p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: break-word;
+}

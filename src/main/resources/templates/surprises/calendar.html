@@ -35,31 +35,57 @@
         <td th:each="day : ${week}"
             th:class="${'day' + (day.getMonthValue() != currentMonth.monthValue ? ' empty-day' : '')}"
             th:attr="data-date=${day}"
-            th:text="${day.getMonthValue() == currentMonth.monthValue} ? ${day.getDayOfMonth()} : ''"
             th:onclick="${day.getMonthValue() == currentMonth.monthValue} ? 'showDay(this.getAttribute(\'data-date\'))' : null">
+
+          <span th:text="${day.getMonthValue() == currentMonth.monthValue} ? ${day.getDayOfMonth()} : ''"></span>
+
+          <!-- Event indicator using pre-calculated eventCounts -->
+          <span th:if="${day.getMonthValue() == currentMonth.monthValue && eventCounts.containsKey(day)}"
+                class="event-badge"
+                th:text="${eventCounts.get(day)}">
+          </span>
         </td>
       </tr>
       </tbody>
     </table>
+
+    <!-- Events Summary Box -->
+    <div class="events-summary mt-4">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="mb-0">Today's Events</h4>
+        </div>
+        <div class="card-body">
+          <div id="todayEvents">
+            <p class="text-muted">Click on a date to see events</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- Event Modal -->
-<!--<div id="eventModal" class="modal">-->
-<!--  <div class="modal-content">-->
-<!--    <span class="close" onclick="closeModal()">&times;</span>-->
-<!--    <h2 id="modalDate"></h2>-->
-<!--    <div id="eventsContainer"></div>-->
-<!--    <hr>-->
-<!--    <h3>Add New Event</h3>-->
-<!--    <form id="eventForm">-->
-<!--      <input type="hidden" id="eventDate">-->
-<!--      <input type="text" id="eventName" placeholder="Event name" required>-->
-<!--      <textarea id="eventDesc" placeholder="Description"></textarea>-->
-<!--      <button type="submit">Add Event</button>-->
-<!--    </form>-->
-<!--  </div>-->
-<!--</div>-->
+<!-- Event Modal-->
+<div id="eventModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2 id="modalDate"></h2>
+    <div id="eventsContainer"></div>
+    <hr>
+    <h3>Add New Event</h3>
+    <form id="eventForm">
+      <input type="hidden" id="eventDate">
+      <div class="form-group">
+        <input type="text" id="eventName" placeholder="Event name" required>
+      </div>
+
+      <div class="form-group">
+        <textarea id="eventDesc" placeholder="Description" rows="4"></textarea>
+      </div>
+      <button type="submit">Add Event</button>
+    </form>
+  </div>
+</div>
 
 <script th:src="@{/js/calendar.js}"></script>
 
