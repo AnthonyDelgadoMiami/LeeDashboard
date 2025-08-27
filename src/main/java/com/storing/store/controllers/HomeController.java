@@ -65,7 +65,25 @@ public class HomeController {
                 "You are so pretty, I could (and do) stare at you for hours",
                 "Probably thinking of kissing you right now",
                 "My hand misses your hand (and your throat)",
-                "I love to make you happy and cared for"
+                "I love to make you happy and cared for",
+                "You’re the best part of my day",
+                "I love how your smile lingers in my head",
+                "My favorite place is always close you",
+                "You make me want to be better every day",
+                "I love the way you see the world",
+                "You’re the most beautiful thought I have",
+                "I crave your voice more than white rice",
+                "I never get tired of you, not for a second",
+                "You’re my safest place and my wildest dream",
+                "I’m addicted to the way you look at me",
+                "Your happiness is my favorite mission",
+                "Even silence with you feels perfect",
+                "I’d choose you in every lifetime",
+                "My tongue remember yours too well",
+                "You’re the best surprise life ever gave me",
+                "The thought of you still gives me butterflies (I struggle to eat)",
+                "Your touch calms my whole body",
+                "Every night, I wish you were here beside me"
         );
 
         // Convert to JSON and add directly to model
@@ -203,7 +221,7 @@ public class HomeController {
         // Night (9 PM - 4 AM)
         else {
             switch(day) {
-                case MONDAY: case TUESDAY: case WEDNESDAY: case THURSDAY: case FRIDAY: return "Good night mi vida, you'll see me soon";
+                case MONDAY: case TUESDAY: case WEDNESDAY: case THURSDAY: case FRIDAY: return "Good night mi vida, you'll see me soon, your eyes should be closed";
                 case SATURDAY: case SUNDAY: return "Let's have a good night, I always have fun with you";
                 default: return "Hope your day is going well, my love! Thinking of you this afternoon.";
             }
