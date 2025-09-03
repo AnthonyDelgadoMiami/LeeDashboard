@@ -205,3 +205,40 @@
     margin-bottom: 0;
     line-height: 1.4;
 }
+
+/* Make modal bigger on smaller screens */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%; /* Increased from 80% */
+        margin: 10% auto; /* Increased from 5% */
+        padding: 25px; /* Increased from 20px */
+        max-height: 85vh; /* Increased from 80vh */
+    }
+
+    #eventsContainer {
+        max-height: 250px; /* Increased from 200px */
+    }
+
+    textarea {
+        min-height: 100px; /* Increased from 80px */
+    }
+}
+
+/* Even larger on very small screens */
+@media (max-width: 480px) {
+    .modal-content {
+        width: 95%; /* Even wider */
+        margin: 5% auto; /* Keep centered with small margin */
+        padding: 20px; /* Slightly less padding to maximize space */
+        border-radius: 0; /* Full width looks better without rounded corners */
+        max-height: 90vh; /* Even taller */
+    }
+
+    .modal {
+        padding: 10px; /* Add some padding around the modal */
+    }
+
+    #eventsContainer {
+        max-height: 300px; /* More space for events */
+    }
+}

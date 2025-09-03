@@ -66,3 +66,51 @@
 .star-header{
     text-align: center;
 }
+
+/* Mobile-friendly quiz options */
+.quiz-answer, .quiz-answer2, .quiz-answer3,
+.quiz-answer4, .quiz-answer5, .quiz-answer6,
+.quiz-answer7, .quiz-answer8, .quiz-answer9,
+.quiz-answer10 {
+    margin-bottom: 8px;
+    width: 100%;
+    text-align: left;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+/* Stack buttons vertically on mobile */
+@media (max-width: 768px) {
+    .card-body .btn {
+        display: block;
+        margin: 8px 0;
+        width: 100%;
+    }
+
+    /* Ensure proper spacing between stacked buttons */
+    .quiz-answer, .quiz-answer2, .quiz-answer3,
+    .quiz-answer4, .quiz-answer5, .quiz-answer6,
+    .quiz-answer7, .quiz-answer8, .quiz-answer9,
+    .quiz-answer10 {
+        margin: 8px 0;
+    }
+}
+
+/* Add some padding for better touch targets on mobile */
+.btn {
+    padding: 12px 16px;
+}
+
+/* Ensure card bodies have proper spacing */
+.card-body {
+    padding: 1rem;
+}
+
+/* Make sure text doesn't overflow on mobile */
+.quiz-answer, .quiz-answer2, .quiz-answer3,
+.quiz-answer4, .quiz-answer5, .quiz-answer6,
+.quiz-answer7, .quiz-answer8, .quiz-answer9,
+.quiz-answer10 {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}

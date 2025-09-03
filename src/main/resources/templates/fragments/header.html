@@ -11,18 +11,18 @@
         <a class="nav-link" href="/galleria">Gallery</a>
         <li class="nav-item">
           <a class="nav-link" th:href="@{/surprises}">
-            <i class="fas fa-calendar-alt"></i> Event Calendar
-          </a>
+            Event Calendar</a>
         </li>
         <a href="/open-when" class="nav-link">Open When Letters</a>
         <li class="nav-item" sec:authorize="isAuthenticated()">
           <form th:action="@{/logout}" method="post" class="d-inline">
             <button type="submit" class="nav-link btn btn-link">
-              <i class="fas fa-sign-out-alt"></i> Logout  <!-- Optional icon -->
+              Logout<!-- Optional icon -->
             </button>
           </form>
         </li>
       </div>
     </div>
   </nav>
+  <script th:src="@{/js/header.js}"></script>
 </header>

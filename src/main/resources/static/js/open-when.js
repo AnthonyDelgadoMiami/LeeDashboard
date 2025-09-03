@@ -1,4 +1,3 @@
-
 const PASSWORD = "bouldering";
 const PASSWORD1 = "climbing";
 
@@ -6,6 +5,16 @@ function openLetter(letterId) {
     const userInput = prompt("What is your favorite activity:");
 
     if(userInput === PASSWORD || userInput === PASSWORD1) {
+        // Save scroll position
+        const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+        // Add no-scroll class to body
+        document.body.classList.add('no-scroll');
+
+        // Store scroll position as data attribute to restore later
+        document.body.dataset.scrollPosition = scrollPosition;
+
+        // Show the modal
         document.getElementById(letterId).style.display = "flex";
     } else {
         alert("Try again, mi vida ❤️");
@@ -13,14 +22,33 @@ function openLetter(letterId) {
 }
 
 function closeModal(letterId) {
+    // Hide the modal
     document.getElementById(letterId).style.display = "none";
+
+    // Remove no-scroll class
+    document.body.classList.remove('no-scroll');
+
+    // Restore scroll position
+    const scrollPosition = document.body.dataset.scrollPosition || 0;
+    window.scrollTo(0, scrollPosition);
 }
 
 // Close modal when clicking outside content
 window.onclick = function(event) {
     document.querySelectorAll('.letter-modal').forEach(modal => {
         if(event.target == modal) {
-            modal.style.display = "none";
+            closeModal(modal.id);
         }
     });
 }
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        document.querySelectorAll('.letter-modal').forEach(modal => {
+            if(modal.style.display === 'flex') {
+                closeModal(modal.id);
+            }
+        });
+    }
+});

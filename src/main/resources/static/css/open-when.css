@@ -53,9 +53,16 @@ h1 {
     width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,0.7);
-    z-index: 100;
+    z-index: 1000;
     justify-content: center;
     align-items: center;
+    overflow: hidden; /* Prevent scrolling on the modal itself */
+}
+
+/* Add this to your CSS */
+body.no-scroll {
+    overflow: hidden;
+    height: 100%;
 }
 
 .letter-content {
@@ -63,10 +70,12 @@ h1 {
     background-size: cover;
     width: 80%;
     max-width: 600px;
+    max-height: 85vh;
     padding: 40px;
     border-radius: 5px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     position: relative;
+    overflow-y: auto;
 }
 
 .letter-paper {
@@ -77,7 +86,25 @@ h1 {
     font-size: 1.3rem;
     line-height: 1.6;
     text-align: left;
+    //overflow-y: auto;
+    //max-height: calc(85vh - 30px);
+    flex-grow: 1;
 }
+
+.modal-body {
+    /* Add flex-grow to take available space */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.letter-paper.p-4 {
+    /* Make this container take available space */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 
 .close {
     position: absolute;
@@ -86,4 +113,29 @@ h1 {
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    z-index: 1001; /* Ensure close button is above content */
+    color: #d23669;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+    .letter-content{
+        padding: 15px;
+    }
+
+    .letter-paper {
+       padding: 10px;
+    }
+
+    .letter-paper.p-4 {
+       padding: 30px;
+    }
+
 }
