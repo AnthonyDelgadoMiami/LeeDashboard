@@ -1,10 +1,9 @@
-const PASSWORD = "bouldering";
-const PASSWORD1 = "climbing";
+const VALID_PASSWORDS = new Set(["bouldering", "climbing", "Climbing", "Bouldering", "Tonio", "Antonio", "Anthony", "tonio", "antonio", 'anthony']);
 
 function openLetter(letterId) {
     const userInput = prompt("What is your favorite activity:");
 
-    if(userInput === PASSWORD || userInput === PASSWORD1) {
+    if(VALID_PASSWORDS.has(userInput)) {
         // Save scroll position
         const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
