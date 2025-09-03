@@ -15,9 +15,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class HomeController {
@@ -45,18 +43,40 @@ public class HomeController {
         String reminderMessage = getDailyReminder();
         model.addAttribute("dailyReminder", reminderMessage);
 
+        // Get events for today and next 4 days (5 days total)
         LocalDate today = LocalDate.now();
-        List<Event> todaysEvents = eventService.getEventsForDate(today);
+        List<EventWithDate> upcomingEvents = new ArrayList<>();
+
+        for (int i = 0; i < 5; i++) {
+            LocalDate date = today.plusDays(i);
+            List<Event> events = eventService.getEventsForDate(date);
+            for (Event event : events) {
+                upcomingEvents.add(new EventWithDate(event, date));
+            }
+        }
 
         // Add to model
-        model.addAttribute("todaysEvents", todaysEvents);
-        model.addAttribute("hasEvents", !todaysEvents.isEmpty());
-
+        model.addAttribute("upcomingEvents", upcomingEvents);
+        model.addAttribute("hasEvents", !upcomingEvents.isEmpty());
 
         // Get weather data her house: 26.642874, -80.066658
         WeatherData weather = getWeatherData("26.642874", "-80.066658");
         model.addAttribute("weather", weather);
         return "index";
+    }
+
+    // Helper class to store event with its date
+    public static class EventWithDate {
+        private Event event;
+        private LocalDate date;
+
+        public EventWithDate(Event event, LocalDate date) {
+            this.event = event;
+            this.date = date;
+        }
+
+        public Event getEvent() { return event; }
+        public LocalDate getDate() { return date; }
     }
 
     @GetMapping("/secret")

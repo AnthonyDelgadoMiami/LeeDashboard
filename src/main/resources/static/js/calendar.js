@@ -8,12 +8,10 @@ function showDay(dateString) {
 
     // Load events for this date
     loadEvents(dateString);
-
     fetchEventsForSummary(dateString);
 
     modal.style.display = 'block';
 }
-
 function closeModal() {
     document.getElementById('eventModal').style.display = 'none';
 }
@@ -135,19 +133,20 @@ function updateEventsSummary(events, dateString) {
             <p class="no-events">No events for ${formattedDate}</p>
         `;
     } else {
-        todayEventsContainer.innerHTML = `
-            <p class="summary-date"><strong>${formattedDate}</strong></p>
-            ${events.map(event => `
-                <div class="event-item">
-                    <div class="event-title">${event.name}</div>
-                    <div class="event-description">${event.description || 'No description'}</div>
-                </div>
-            `).join('')}
-        `;
+        todayEventsContainer.innerHTML = events.map(event => `
+            <div class="event-item">
+                <div class="event-title">${event.name}</div>
+                <div class="event-description">${event.description || 'No description'}</div>
+            </div>
+        `).join('');
     }
 }
 
 function fetchEventsForSummary(dateString) {
+    // Update the title first
+    updateEventsSummaryTitle(dateString);
+
+    // Then fetch events as before
     fetch(`/surprises/events?date=${dateString}`, {
         headers: {
             'Content-Type': 'application/json',
@@ -167,9 +166,18 @@ function fetchEventsForSummary(dateString) {
     });
 }
 
+function updateEventsSummaryTitle(dateString) {
+    const titleElement = document.getElementById('eventsSummaryTitle');
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0];
+    const isToday = dateString === todayString;
+
+    titleElement.textContent = isToday ? "Today's Events" : `${formatDate(dateString)}'s Events`;
+}
+
 // Optional: Load today's events when page loads
 document.addEventListener('DOMContentLoaded', function() {
     const today = new Date();
-    const todayString = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+    const todayString = today.toISOString().split('T')[0];
     fetchEventsForSummary(todayString);
 });
