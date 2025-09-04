@@ -31,7 +31,7 @@
     </div>
     <div class="card-body bg-info bg-opacity-10">
       <p class="card-text fst-italic fs-5" th:text="${dailyReminder}"></p>
-      <small class="text-muted" th:text="'(' + ${T(java.time.LocalDate).now().getDayOfWeek().toString().toLowerCase()} + ' ' + ${T(java.time.LocalTime).now().format(T(java.time.format.DateTimeFormatter).ofPattern('hh:mm a'))} + ')'"></small>
+      <small class="text-muted" th:text="'(' + ${T(java.time.LocalDate).now().getDayOfWeek().toString().substring(0, 1).toUpperCase()} + ${T(java.time.LocalDate).now().getDayOfWeek().toString().substring(1).toLowerCase()} + ' ' + ${T(java.time.LocalTime).now().format(T(java.time.format.DateTimeFormatter).ofPattern('hh:mm a'))} + ')'"></small>
     </div>
   </div>
 

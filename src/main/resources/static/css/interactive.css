@@ -87,6 +87,10 @@
         width: 100%;
     }
 
+    .night-sky {
+        height: 70vh;
+    }
+
     /* Ensure proper spacing between stacked buttons */
     .quiz-answer, .quiz-answer2, .quiz-answer3,
     .quiz-answer4, .quiz-answer5, .quiz-answer6,
