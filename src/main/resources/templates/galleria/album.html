@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <title th:text="${album.title} + ' Album'"></title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
@@ -23,8 +25,39 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
   </div>
 
-  <h1 class="mb-3" th:text="${album.title}"></h1>
-  <p class="text-muted mb-4" th:text="${album.description}"></p>
+  <div class="editable-field">
+    <div class="d-flex justify-content-between align-items-center">
+      <h1 class="mb-3 view-mode" id="titleView" th:text="${album.title}"></h1>
+      <button id="titleEditToggle" class="btn btn-link edit-toggle p-0 ms-2">
+        <i class="bi bi-pencil"></i>
+      </button>
+    </div>
+
+    <div id="titleEditForm" class="edit-form">
+      <input type="text" id="titleInput" class="form-control" th:value="${album.title}">
+      <div class="edit-buttons">
+        <button id="saveTitleBtn" class="btn btn-success btn-sm">Save</button>
+        <button id="cancelTitleBtn" class="btn btn-secondary btn-sm">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="editable-field">
+    <div class="d-flex justify-content-between align-items-start">
+      <p class="text-muted mb-4 view-mode" id="descView" th:text="${album.description}"></p>
+      <button id="descEditToggle" class="btn btn-link edit-toggle p-0 ms-2">
+        <i class="bi bi-pencil"></i>
+      </button>
+    </div>
+
+    <div id="descEditForm" class="edit-form">
+      <textarea id="descInput" class="form-control" th:text="${album.description}" rows="3"></textarea>
+      <div class="edit-buttons">
+        <button id="saveDescBtn" class="btn btn-success btn-sm">Save</button>
+        <button id="cancelDescBtn" class="btn btn-secondary btn-sm">Cancel</button>
+      </div>
+    </div>
+  </div>
 
   <form id="addImagesForm" th:action="@{/galleria/album/{id}/add-images(id=${album.id})}"
         method="post" enctype="multipart/form-data">

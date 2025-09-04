@@ -114,5 +114,9 @@ public class GalleryService {
         albumRepository.save(album);
     }
 
+    public void updateAlbum(Album album) {
+        albumRepository.save(album);
+    }
+
 
 }

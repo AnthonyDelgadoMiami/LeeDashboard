@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.http.ResponseEntity;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/galleria")
@@ -105,4 +107,48 @@ public class GalleryController {
         galleryService.deleteAlbum(id);
         return "redirect:/galleria";
     }
+
+    @PostMapping("/album/{albumId}/edit")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> editAlbumField(
+            @PathVariable("albumId") Long id,
+            @RequestBody Map<String, String> payload) {
+
+        String field = payload.get("field");
+        String value = payload.get("value");
+
+        try {
+            Album album = galleryService.getAlbumById(id);
+            if (album == null) {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "success", false,
+                        "message", "Album not found"
+                ));
+            }
+
+            if ("title".equals(field)) {
+                album.setTitle(value);
+            } else if ("description".equals(field)) {
+                album.setDescription(value);
+            } else {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "success", false,
+                        "message", "Invalid field"
+                ));
+            }
+
+            galleryService.updateAlbum(album);
+
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "message", "Field updated successfully"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "success", false,
+                    "message", e.getMessage()
+            ));
+        }
+    }
+
 }
