@@ -144,3 +144,198 @@ window.addEventListener('load', function() {
     // Check immediately in case the element is already in view
     handleScrollAnimation();
 });
+
+// Heart-catching game implementation
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('heart-game');
+    const ctx = canvas.getContext('2d');
+    const startButton = document.getElementById('start-game');
+    const scoreDisplay = document.getElementById('game-score');
+    const timerDisplay = document.getElementById('game-timer');
+    const resultDisplay = document.getElementById('game-result');
+
+    // Adjust canvas size for mobile
+    if (window.innerWidth <= 768) {
+        canvas.width = window.innerWidth - 40;
+        canvas.height = 300;
+    }
+
+    let gameActive = false;
+    let score = 0;
+    let timeLeft = 30;
+    let timer;
+    let basket = { x: canvas.width / 2 - 30, width: 60 };
+    let hearts = [];
+    let touchX = null;
+
+    // Heart class
+    class Heart {
+        constructor() {
+            this.x = Math.random() * (canvas.width - 30);
+            this.y = -30;
+            this.size = 20 + Math.random() * 15;
+            this.speed = 2 + Math.random() * 3;
+            this.color = `hsl(${Math.random() * 360}, 100%, 65%)`;
+        }
+
+        update() {
+            this.y += this.speed;
+        }
+
+        draw() {
+            ctx.fillStyle = this.color;
+            this.drawHeart(this.x, this.y, this.size);
+        }
+
+        drawHeart(x, y, size) {
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.bezierCurveTo(
+                x, y - size / 2,
+                x - size, y - size / 2,
+                x - size, y
+            );
+            ctx.bezierCurveTo(
+                x - size, y + size / 3,
+                x, y + size,
+                x, y + size
+            );
+            ctx.bezierCurveTo(
+                x, y + size,
+                x + size, y + size / 3,
+                x + size, y
+            );
+            ctx.bezierCurveTo(
+                x + size, y - size / 2,
+                x, y - size / 2,
+                x, y
+            );
+            ctx.fill();
+        }
+
+        isCaught() {
+            return this.y + this.size > canvas.height - 20 &&
+                   this.x > basket.x &&
+                   this.x < basket.x + basket.width;
+        }
+    }
+
+    // Draw basket
+    function drawBasket() {
+        ctx.fillStyle = '#6f42c1';
+        ctx.fillRect(basket.x, canvas.height - 20, basket.width, 10);
+        ctx.fillStyle = '#5a32a3';
+        ctx.fillRect(basket.x + 5, canvas.height - 25, basket.width - 10, 5);
+    }
+
+    // Game loop
+    function gameLoop() {
+        if (!gameActive) return;
+
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw basket
+        drawBasket();
+
+        // Create new hearts occasionally
+        if (Math.random() < 0.05) {
+            hearts.push(new Heart());
+        }
+
+        // Update and draw hearts
+        for (let i = hearts.length - 1; i >= 0; i--) {
+            hearts[i].update();
+            hearts[i].draw();
+
+            // Check if heart is caught
+            if (hearts[i].isCaught()) {
+                hearts.splice(i, 1);
+                score++;
+                scoreDisplay.textContent = `Hearts: ${score}`;
+                continue;
+            }
+
+            // Remove hearts that fell off screen
+            if (hearts[i].y > canvas.height) {
+                hearts.splice(i, 1);
+            }
+        }
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    // Start game
+    function startGame() {
+        gameActive = true;
+        score = 0;
+        timeLeft = 30;
+        hearts = [];
+        scoreDisplay.textContent = `Hearts: ${score}`;
+        timerDisplay.textContent = `Time: ${timeLeft}s`;
+        resultDisplay.textContent = '';
+        startButton.textContent = 'Playing...';
+        startButton.disabled = true;
+
+        // Start timer
+        timer = setInterval(() => {
+            timeLeft--;
+            timerDisplay.textContent = `Time: ${timeLeft}s`;
+
+            if (timeLeft <= 0) {
+                endGame();
+            }
+        }, 1000);
+
+        gameLoop();
+    }
+
+    // End game
+    function endGame() {
+        gameActive = false;
+        clearInterval(timer);
+        startButton.textContent = 'Play Again';
+        startButton.disabled = false;
+
+        // Display result message based on score
+        let message = '';
+        if (score < 30) {
+            message = `You caught ${score} hearts! I still Love you, but maybe try again? 💖`;
+        } else if (score < 55) {
+            message = `You caught ${score} hearts! You've captured some of my Love! 💕`;
+        } else if (score < 70) {
+            message = `You caught ${score} hearts! You've captured most of my heart! 💞`;
+        } else {
+            message = `You caught ${score} hearts! You've captured all of my Love! I'm yours forever! 💘`;
+        }
+
+        resultDisplay.innerHTML = `<h4>Game Over!</h4><p>${message}</p>`;
+    }
+
+    // Mouse movement
+    canvas.addEventListener('mousemove', (e) => {
+        if (!gameActive) return;
+        const rect = canvas.getBoundingClientRect();
+        basket.x = e.clientX - rect.left - basket.width / 2;
+
+        // Keep basket within canvas
+        if (basket.x < 0) basket.x = 0;
+        if (basket.x + basket.width > canvas.width) basket.x = canvas.width - basket.width;
+    });
+
+    // Touch movement for mobile
+    canvas.addEventListener('touchmove', (e) => {
+        if (!gameActive) return;
+        e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        touchX = e.touches[0].clientX - rect.left;
+        basket.x = touchX - basket.width / 2;
+
+        // Keep basket within canvas
+        if (basket.x < 0) basket.x = 0;
+        if (basket.x + basket.width > canvas.width) basket.x = canvas.width - basket.width;
+    });
+
+    // Start button event
+    startButton.addEventListener('click', startGame);
+});
