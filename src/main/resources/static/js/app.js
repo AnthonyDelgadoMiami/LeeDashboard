@@ -21,6 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
         new QuizManager('quiz-answer8', 'correct-answer8', 'quizResult8');
         new QuizManager('quiz-answer9', 'correct-answer9', 'quizResult9');
         new QuizManager('quiz-answer10', 'correct-answer10', 'quizResult10');
+        new QuizManager('quiz-answer11', 'correct-answer11', 'quizResult11');
+        new QuizManager('quiz-answer12', 'correct-answer12', 'quizResult12');
+        new QuizManager('quiz-answer13', 'correct-answer13', 'quizResult13');
+
 
 
         console.log('Initialized successfully with compliments:', compliments);

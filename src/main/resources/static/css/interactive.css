@@ -71,7 +71,7 @@
 .quiz-answer, .quiz-answer2, .quiz-answer3,
 .quiz-answer4, .quiz-answer5, .quiz-answer6,
 .quiz-answer7, .quiz-answer8, .quiz-answer9,
-.quiz-answer10 {
+.quiz-answer10, .quiz-answer11, .quiz-answer12, .quiz-answer13 {
     margin-bottom: 8px;
     width: 100%;
     text-align: left;
@@ -95,7 +95,7 @@
     .quiz-answer, .quiz-answer2, .quiz-answer3,
     .quiz-answer4, .quiz-answer5, .quiz-answer6,
     .quiz-answer7, .quiz-answer8, .quiz-answer9,
-    .quiz-answer10 {
+    .quiz-answer10, .quiz-answer11, .quiz-answer12, .quiz-answer13 {
         margin: 8px 0;
     }
 }
@@ -114,7 +114,7 @@
 .quiz-answer, .quiz-answer2, .quiz-answer3,
 .quiz-answer4, .quiz-answer5, .quiz-answer6,
 .quiz-answer7, .quiz-answer8, .quiz-answer9,
-.quiz-answer10 {
+.quiz-answer10,.quiz-answer11,.quiz-answer12,.quiz-answer13 {
     font-size: 0.9rem;
     line-height: 1.4;
 }
