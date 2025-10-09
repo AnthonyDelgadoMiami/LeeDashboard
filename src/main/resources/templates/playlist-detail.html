@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playlist - Emily's Spotify</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/index.css}" rel="stylesheet">
+    <link th:href="@{/css/header.css}" rel="stylesheet">
+    <style>
+        .music-card {
+          transition: transform 0.2s ease-in-out;
+          border: none;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .music-card:hover {
+          transform: translateY(-2px);
+        }
+        .album-art {
+          border-radius: 8px;
+          object-fit: cover;
+        }
+        .track-item {
+          border-left: 3px solid #1DB954;
+          transition: all 0.2s ease;
+        }
+        .track-item:hover {
+          background-color: #f8f9fa;
+          border-left-color: #1ed760;
+        }
+        .spotify-player-container {
+          margin-top: 10px;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .spotify-embed {
+          border-radius: 12px;
+          border: none;
+        }
+        .player-toggle-btn {
+          transition: all 0.2s ease;
+        }
+        .track-expanded {
+          background-color: #f8fff9;
+          border-left-color: #1DB954;
+          border-left-width: 5px;
+        }
+        .duration {
+          font-size: 0.85rem;
+          color: #6c757d;
+        }
+        .preview-indicator {
+          font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-4">
+    <!-- Back Button -->
+    <div class="mb-4">
+        <button class="btn btn-outline-secondary" onclick="window.history.back()">
+            ← Back to Spotify
+        </button>
+
+        <!-- Test Mode Indicator -->
+        <span th:if="${testMode}" class="badge bg-warning ms-2">Test Mode - Popular Playlist</span>
+    </div>
+
+    <!-- Playlist Header -->
+    <div th:if="${playlist != null}" class="card music-card mb-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-3 text-center">
+                    <img th:if="${playlist.imageUrl}" th:src="${playlist.imageUrl}"
+                         class="album-art mb-3" width="200" height="200"
+                         onerror="this.style.display='none'">
+                    <div th:unless="${playlist.imageUrl}"
+                         class="album-art mb-3 mx-auto bg-success bg-opacity-25 d-flex align-items-center justify-content-center"
+                         style="width: 200px; height: 200px;">
+                        <span class="display-1">🎵</span>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <h1 class="display-5 fw-bold" th:text="${playlist.name}"></h1>
+                    <p class="lead" th:if="${playlist.description}" th:text="${playlist.description}"></p>
+                    <div class="mt-3">
+                        <span class="badge bg-success fs-6" th:text="${playlist.tracks != null ? playlist.tracks.size() : '0'} + ' tracks'"></span>
+                        <span th:if="${playlist.tracks != null}" class="badge bg-info ms-2">
+                            <span th:text="${playlist.tracks.?[previewUrl != null].size()}">0</span> with previews
+                        </span>
+                    </div>
+                    <div class="mt-3">
+                        <a th:href="${'https://open.spotify.com/playlist/' + playlist.id}"
+                           target="_blank" class="btn btn-success btn-lg">
+                            <i class="bi bi-spotify"></i> Open in Spotify
+                        </a>
+                        <a th:if="${testMode}" href="/spotify" class="btn btn-outline-secondary btn-lg ms-2">
+                            Back to My Playlists
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Information Alert -->
+    <div class="alert alert-info mt-3">
+        <h6><i class="bi bi-info-circle"></i> About Previews</h6>
+        <p class="mb-1">30-second previews are provided by Spotify but aren't available for all tracks due to licensing restrictions.</p>
+        <small>Click the <strong>"Play" button</strong> below each track to open the full Spotify player with complete songs.</small>
+    </div>
+
+    <!-- Error Message -->
+    <div th:if="${error}" class="alert alert-danger mt-3" role="alert">
+        <strong>Error:</strong> <span th:text="${error}"></span>
+    </div>
+
+    <!-- Tracks List -->
+    <div th:if="${playlist != null && playlist.tracks != null && !playlist.tracks.empty}" class="card music-card">
+        <div class="card-header bg-success bg-opacity-25 d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">🎵 Tracks</h5>
+            <small class="text-muted">
+                Click "Play" to listen to full songs via Spotify
+            </small>
+        </div>
+        <div class="card-body p-0">
+            <div class="list-group list-group-flush">
+                <div th:each="track, stat : ${playlist.tracks}"
+                     class="list-group-item track-item p-3"
+                     th:id="'track-' + ${stat.index}">
+                    <div class="d-flex align-items-center">
+                        <!-- Track Number -->
+                        <div class="me-3 text-center" style="width: 30px;">
+                            <span class="text-muted" th:text="${stat.index + 1}"></span>
+                        </div>
+
+                        <!-- Track Art -->
+                        <img th:if="${track.imageUrl != null}" th:src="${track.imageUrl}"
+                             class="album-art me-3" width="50" height="50"
+                             onerror="this.style.display='none'">
+                        <div th:unless="${track.imageUrl != null}"
+                             class="album-art me-3 bg-secondary d-flex align-items-center justify-content-center"
+                             style="width: 50px; height: 50px;">
+                            <span class="text-muted">🎵</span>
+                        </div>
+
+                        <!-- Track Info -->
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1" th:text="${track.name}">Unknown Track</h6>
+                            <p class="mb-0 text-muted" th:text="${track.artist}">Unknown Artist</p>
+
+                            <!-- Preview Availability Indicator -->
+                            <div class="preview-indicator">
+                                <span th:if="${track.previewUrl != null}" class="text-success">
+                                    <i class="bi bi-check-circle"></i> 30-second preview available
+                                </span>
+                                <span th:if="${track.previewUrl == null}" class="text-muted">
+                                    <i class="bi bi-music-note"></i> Full song via Spotify player
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Duration -->
+                        <div class="ms-3 duration" th:text="${track.formattedDuration}">0:00</div>
+
+                        <!-- Spotify Player Toggle -->
+                        <div class="ms-3">
+                            <button class="btn btn-success btn-sm player-toggle-btn"
+                                    th:attr="data-track-id=${track.trackId}, data-track-index=${stat.index}"
+                                    th:disabled="${track.trackId == null}"
+                                    th:title="${track.trackId == null ? 'Cannot load Spotify player' : 'Toggle Spotify player'}"
+                                    onclick="toggleSpotifyPlayer(this)">
+                                <i class="bi bi-spotify"></i>
+                                <span class="player-text">Play</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Spotify Player Container (hidden by default) -->
+                    <div class="spotify-player-container mt-3"
+                         th:attr="id=${'player-container-' + stat.index}"
+                         style="display: none;">
+                        <iframe th:if="${track.trackId != null}"
+                                th:attr="src=${'https://open.spotify.com/embed/track/' + track.trackId + '?utm_source=generator&theme=0'}"
+                                width="100%"
+                                height="152"
+                                frameborder="0"
+                                allowfullscreen=""
+                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                loading="lazy"
+                                class="spotify-embed">
+                        </iframe>
+                        <div th:unless="${track.trackId != null}" class="alert alert-warning text-center">
+                            <i class="bi bi-exclamation-triangle"></i> Spotify player not available for this track
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- No Tracks Message -->
+    <div th:if="${playlist != null && (playlist.tracks == null || playlist.tracks.empty)}" class="text-center py-5">
+        <i class="bi bi-music-note-list display-1 text-muted"></i>
+        <h4 class="text-muted mt-3">No tracks available</h4>
+        <p class="text-muted">This playlist doesn't have any tracks or they're not accessible.</p>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+<script>
+    let currentlyExpandedTrack = null;
+
+    function toggleSpotifyPlayer(button) {
+        const trackIndex = button.getAttribute('data-track-index');
+        const playerContainer = document.getElementById('player-container-' + trackIndex);
+        const trackElement = document.getElementById('track-' + trackIndex);
+        const playerText = button.querySelector('.player-text');
+
+        if (playerContainer.style.display === 'none') {
+            // Close any other open players
+            if (currentlyExpandedTrack !== null && currentlyExpandedTrack !== trackIndex) {
+                closePlayer(currentlyExpandedTrack);
+            }
+
+            // Open this player
+            playerContainer.style.display = 'block';
+            playerText.textContent = 'Hide';
+            button.classList.remove('btn-success');
+            button.classList.add('btn-outline-success');
+            trackElement.classList.add('track-expanded');
+            currentlyExpandedTrack = trackIndex;
+
+            // Scroll into view if needed
+            playerContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+            closePlayer(trackIndex);
+        }
+    }
+
+    function closePlayer(trackIndex) {
+        const playerContainer = document.getElementById('player-container-' + trackIndex);
+        const button = document.querySelector(`[data-track-index="${trackIndex}"]`);
+        const trackElement = document.getElementById('track-' + trackIndex);
+
+        if (playerContainer) playerContainer.style.display = 'none';
+        if (button) {
+            button.querySelector('.player-text').textContent = 'Play';
+            button.classList.remove('btn-outline-success');
+            button.classList.add('btn-success');
+        }
+        if (trackElement) trackElement.classList.remove('track-expanded');
+
+        if (currentlyExpandedTrack === trackIndex) {
+            currentlyExpandedTrack = null;
+        }
+    }
+
+    // Close player when clicking outside
+    document.addEventListener('click', function(event) {
+        if (currentlyExpandedTrack !== null) {
+            const playerContainer = document.getElementById('player-container-' + currentlyExpandedTrack);
+            const button = document.querySelector(`[data-track-index="${currentlyExpandedTrack}"]`);
+
+            if (playerContainer && button &&
+                !playerContainer.contains(event.target) &&
+                !button.contains(event.target)) {
+                closePlayer(currentlyExpandedTrack);
+            }
+        }
+    });
+</script>
+</body>
+</html>
