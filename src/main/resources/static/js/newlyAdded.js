@@ -1,4 +1,34 @@
 
+// Function for featured tracks (most played & last played)
+function playFeaturedTrack(button, playerId) {
+    const playerContainer = document.getElementById(playerId);
+    const isVisible = playerContainer.style.display === 'block';
+
+    // Close all featured track players
+    document.querySelectorAll('.spotify-player-container').forEach(container => {
+        if (container.id.includes('popular') || container.id.includes('played')) {
+            container.style.display = 'none';
+        }
+    });
+
+    // Toggle this player
+    if (!isVisible) {
+        playerContainer.style.display = 'block';
+        button.innerHTML = '<i class="bi bi-spotify"></i> Hide';
+        button.classList.remove('btn-success');
+        button.classList.add('btn-outline-success');
+
+        // Scroll into view if needed
+        playerContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+        playerContainer.style.display = 'none';
+        button.innerHTML = '<i class="bi bi-spotify"></i> Play';
+        button.classList.remove('btn-outline-success');
+        button.classList.add('btn-success');
+    }
+}
+
+// Keep your existing JavaScript for the recent tracks section
 let currentlyExpandedTrack = null;
 
 function toggleSpotifyPlayer(button) {
