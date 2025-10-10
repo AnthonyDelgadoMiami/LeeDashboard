@@ -101,42 +101,89 @@
         <!-- Main Content -->
         <div class="col-md-8">
 
-            <!-- Featured Tracks -->
             <div class="card music-card mb-4">
                 <div class="card-header bg-success bg-opacity-25 d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">⭐ Featured Tracks</h5>
-                    <small class="text-muted">From my playlists</small>
+                    <h5 class="card-title mb-0">⭐ Recently Added</h5>
+                    <small class="text-muted">Latest from my playlists</small>
                 </div>
                 <div class="card-body">
-                    <div th:if="${spotifyData.topTracks != null && !spotifyData.topTracks.empty}">
-                        <div th:each="track, stat : ${spotifyData.topTracks}"
-                             class="d-flex align-items-center mb-3 p-2 track-item">
-                            <span class="badge bg-success me-3" th:text="${stat.index + 1}"></span>
-                            <img th:src="${track.imageUrl}" class="album-art me-3" width="50" height="50"
-                                 onerror="this.style.display='none'">
-                            <div th:unless="${track.imageUrl}"
-                                 class="album-art me-3 bg-secondary d-flex align-items-center justify-content-center"
-                                 style="width: 50px; height: 50px;">
-                                <span class="text-muted">🎵</span>
+                    <div th:if="${recentTracks != null && !recentTracks.empty}">
+                        <div th:each="track, stat : ${recentTracks}"
+                             class="list-group-item track-item p-3 mb-2"
+                             th:id="'recent-track-' + ${stat.index}">
+                            <div class="d-flex align-items-center">
+                                <!-- Track Number -->
+                                <div class="me-3 text-center" style="width: 30px;">
+                                    <span class="text-muted" th:text="${stat.index + 1}"></span>
+                                </div>
+
+                                <!-- Track Art -->
+                                <img th:if="${track.imageUrl != null}" th:src="${track.imageUrl}"
+                                     class="album-art me-3" width="50" height="50"
+                                     onerror="this.style.display='none'">
+                                <div th:unless="${track.imageUrl != null}"
+                                     class="album-art me-3 bg-secondary d-flex align-items-center justify-content-center"
+                                     style="width: 50px; height: 50px;">
+                                    <span class="text-muted">🎵</span>
+                                </div>
+
+                                <!-- Track Info -->
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1" th:text="${track.name}">Unknown Track</h6>
+                                    <p class="mb-0 text-muted" th:text="${track.artist}">Unknown Artist</p>
+
+                                    <!-- Preview Availability Indicator -->
+                                    <div class="preview-indicator">
+                            <span th:if="${track.previewUrl != null}" class="text-success">
+                                <i class="bi bi-check-circle"></i> Preview available
+                            </span>
+                                        <span th:if="${track.previewUrl == null}" class="text-muted">
+                                <i class="bi bi-music-note"></i> Full song via Spotify
+                            </span>
+                                    </div>
+                                </div>
+
+                                <!-- Duration -->
+                                <div class="ms-3 duration" th:text="${track.formattedDuration}">0:00</div>
+
+                                <!-- Spotify Player Toggle -->
+                                <div class="ms-3">
+                                    <button class="btn btn-success btn-sm player-toggle-btn"
+                                            th:attr="data-track-id=${track.trackId}, data-track-index=${stat.index}"
+                                            th:disabled="${track.trackId == null}"
+                                            th:title="${track.trackId == null ? 'Cannot load Spotify player' : 'Toggle Spotify player'}"
+                                            onclick="toggleSpotifyPlayer(this)">
+                                        <i class="bi bi-spotify"></i>
+                                        <span class="player-text">Play</span>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="flex-grow-1">
-                                <h6 class="mb-0" th:text="${track.name}"></h6>
-                                <small class="text-muted" th:text="${track.artist}"></small>
-                            </div>
-                            <div class="ms-3">
-                                <audio th:if="${track.previewUrl != null}" controls class="me-2" style="height: 30px;">
-                                    <source th:src="${track.previewUrl}" type="audio/mpeg">
-                                </audio>
-                                <a th:href="${track.externalUrl}" target="_blank" class="btn btn-outline-success btn-sm">
-                                    Open
-                                </a>
+
+                            <!-- Spotify Player Container (hidden by default) -->
+                            <div class="spotify-player-container mt-3"
+                                 th:attr="id=${'recent-player-container-' + stat.index}"
+                                 style="display: none;">
+                                <iframe th:if="${track.trackId != null}"
+                                        th:attr="src=${'https://open.spotify.com/embed/track/' + track.trackId + '?utm_source=generator&theme=0'}"
+                                        width="100%"
+                                        height="152"
+                                        frameborder="0"
+                                        allowfullscreen=""
+                                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                        loading="lazy"
+                                        class="spotify-embed">
+                                </iframe>
+                                <div th:unless="${track.trackId != null}" class="alert alert-warning text-center">
+                                    <i class="bi bi-exclamation-triangle"></i> Spotify player not available for this track
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div th:unless="${spotifyData.topTracks != null && !spotifyData.topTracks.empty}">
+                    <div th:unless="${recentTracks != null && !recentTracks.empty}">
                         <div class="text-center py-4 text-muted">
                             <i class="bi bi-music-note-beamed display-4"></i>
-                            <p>Featured tracks will appear here</p>
+                            <p>Recent tracks will appear here</p>
+                            <small class="text-muted">Tracks from your playlists will show up here</small>
                         </div>
                     </div>
                 </div>
@@ -213,6 +260,7 @@
       event.stopPropagation();
     }
 </script>
+<script th:src="@{/js/newlyAdded.js}"></script>
 
 <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">

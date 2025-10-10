@@ -111,6 +111,7 @@ public class SpotifyController {
             SpotifyData spotifyData = getSpotifyData();
             model.addAttribute("spotifyData", spotifyData);
             model.addAttribute("profile", spotifyData.getProfile());
+            model.addAttribute("recentTracks", spotifyData.getTopTracks()); // Use the same list
             model.addAttribute("lastUpdated", LocalDateTime.now());
 
         } catch (Exception e) {
@@ -271,7 +272,7 @@ public class SpotifyController {
         try {
             data.setPlaylists(getPublicPlaylists());
             data.setProfile(getPublicProfile());
-            data.setTopTracks(getTopTracksFromPlaylists());
+            data.setTopTracks(getRecentTracks()); // Use recent tracks instead of top tracks
         } catch (Exception e) {
             System.err.println("Error fetching Spotify data: " + e.getMessage());
         }
@@ -348,7 +349,7 @@ public class SpotifyController {
 
         try {
             ResponseEntity<String> response = restTemplate.exchange(
-                    "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks?limit=10",
+                    "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks?limit=5",
                     HttpMethod.GET, entity, String.class);
 
             JsonNode json = objectMapper.readTree(response.getBody());
@@ -357,11 +358,31 @@ public class SpotifyController {
                 if (item.has("track") && !item.get("track").isNull()) {
                     JsonNode trackNode = item.get("track");
                     SpotifyTrack track = new SpotifyTrack();
-                    track.setName(trackNode.get("name").asText());
-                    track.setArtist(trackNode.get("artists").get(0).get("name").asText());
-                    track.setPreviewUrl(trackNode.has("preview_url") ? trackNode.get("preview_url").asText() : null);
-                    track.setExternalUrl(trackNode.get("external_urls").get("spotify").asText());
-                    track.setImageUrl(trackNode.get("album").get("images").get(0).get("url").asText());
+                    track.setName(trackNode.has("name") ? trackNode.get("name").asText() : "Unknown Track");
+
+                    if (trackNode.has("artists") && trackNode.get("artists").size() > 0) {
+                        track.setArtist(trackNode.get("artists").get(0).get("name").asText());
+                    } else {
+                        track.setArtist("Unknown Artist");
+                    }
+
+                    if (trackNode.has("preview_url") && !trackNode.get("preview_url").isNull()) {
+                        track.setPreviewUrl(trackNode.get("preview_url").asText());
+                    }
+
+                    if (trackNode.has("external_urls") && trackNode.get("external_urls").has("spotify")) {
+                        track.setExternalUrl(trackNode.get("external_urls").get("spotify").asText());
+                    }
+
+                    if (trackNode.has("album") && trackNode.get("album").has("images") &&
+                            trackNode.get("album").get("images").size() > 0) {
+                        track.setImageUrl(trackNode.get("album").get("images").get(0).get("url").asText());
+                    }
+
+                    if (trackNode.has("duration_ms")) {
+                        track.setDurationMs(trackNode.get("duration_ms").asLong());
+                    }
+
                     tracks.add(track);
                 }
             }
@@ -371,6 +392,36 @@ public class SpotifyController {
 
         return tracks;
     }
+
+    private List<SpotifyTrack> getRecentTracks() {
+        List<SpotifyTrack> recentTracks = new ArrayList<>();
+        try {
+            // Get all public playlists
+            List<SpotifyPlaylist> playlists = getPublicPlaylists();
+
+            // Get a few tracks from the first few playlists (or recently updated ones)
+            int tracksNeeded = 3;
+            int playlistsChecked = 0;
+
+            for (SpotifyPlaylist playlist : playlists) {
+                if (playlistsChecked >= 2 || recentTracks.size() >= tracksNeeded) break;
+
+                // Get first few tracks from this playlist
+                List<SpotifyTrack> playlistTracks = getPlaylistTracks(playlist.getId());
+                for (int i = 0; i < Math.min(2, playlistTracks.size()); i++) {
+                    if (recentTracks.size() < tracksNeeded) {
+                        recentTracks.add(playlistTracks.get(i));
+                    }
+                }
+                playlistsChecked++;
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error getting recent tracks: " + e.getMessage());
+        }
+        return recentTracks;
+    }
+
 
     private List<SpotifyPlaylist> getFallbackPlaylists() {
         List<SpotifyPlaylist> playlists = new ArrayList<>();
